@@ -4,7 +4,9 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
+
 const sendEmail = require("../utils/sendEmail");
+const sendToken = require("../utils/jwtToken");
 
 // Register a user   => /api/v1/register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -83,10 +85,7 @@ exports.activeEmail = catchAsyncErrors(async (req, res, next) => {
             url: avatar.url,
         },
     });
-    res.status(200).json({
-        success: true,
-        newUser,
-    });
+    sendToken(newUser, 200, res);
 });
 
 // Login User  =>  /api/v1/login
@@ -117,10 +116,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler(`Invalid ${loginType} or Password`, 401));
     }
 
-    res.status(200).json({
-        success: true,
-        user,
-    });
+    sendToken(user, 200, res);
 });
 
 // acount active token
