@@ -3,6 +3,7 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
+const validator = require("validator");
 const sendEmail = require("../utils/sendEmail");
 
 // Register a user   => /api/v1/register
@@ -38,7 +39,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
 
                         <p>If the button doesn't work for any reason, you can also click on the link below:</p>
 
-                        <div>${resetUrl}</div>
+                        <div style="display: flex; flex-wrap: wrap;">${resetUrl}</div>
                         <p>If you have not requested this email, then ignore it.</p>
                     </div>`;
 
@@ -85,6 +86,40 @@ exports.activeEmail = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         newUser,
+    });
+});
+
+// Login User  =>  /api/v1/login
+exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+    const { emailOrUsername, password } = req.body;
+
+    // Checks if email and password is entered by user
+    if (!emailOrUsername || !password) {
+        return next(
+            new ErrorHandler("Please enter email or username & password", 400)
+        );
+    }
+
+    // check login type is email or username
+    let loginType = validator.isEmail(emailOrUsername) ? "Email" : "Username";
+
+    // Finding user in database
+    const user = await User.findOne({ emailOrUsername }).select("+password");
+
+    if (!user) {
+        return next(new ErrorHandler(`Invalid ${loginType} or Password`, 401));
+    }
+
+    // Checks if password is correct or not
+    const isPasswordMatched = await user.comparePassword(password);
+
+    if (!isPasswordMatched) {
+        return next(new ErrorHandler(`Invalid ${loginType} or Password`, 401));
+    }
+
+    res.status(200).json({
+        success: true,
+        user,
     });
 });
 
