@@ -9,6 +9,7 @@ const {
     resetPassword,
 } = require("../controller/authController");
 
+// authnication
 router.route("/register").post(registerUser);
 router.route("/activation").post(activeEmail);
 router.route("/login").post(loginUser);
