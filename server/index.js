@@ -17,6 +17,11 @@ app.use(fileUpload());
 // connecting to database
 connectDatabase();
 
+// import all routes
+const auth = require("./routes/auth");
+
+app.use("/api/v1", auth);
+
 app.use("/", (req, res) => {
     res.send("App is running.");
 });
