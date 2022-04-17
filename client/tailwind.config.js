@@ -12,6 +12,9 @@ module.exports = {
             poppins: ["Poppins", "sans-serif"],
             roboto: ["Roboto", "sans-serif"],
         },
+        minHeight: {
+            full: "calc(100vh - 70px)",
+        },
         screens: {
             "2xl": { max: "1535px" },
             // => @media (max-width: 1535px) { ... }
