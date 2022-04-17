@@ -1,7 +1,65 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { clearErrors, register } from "../../../actions/authActions";
 
 const Register = () => {
+    const [user, setUser] = useState({
+        firstName: "",
+        lastName: "",
+        username: "",
+        email: "",
+        password: "",
+    });
+
+    const [inputError, setInputError] = useState("");
+
+    let navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const { firstName, lastName, username, email, password } = user;
+
+    const { isAuthenticated, error, success, message } = useSelector(
+        (state) => state.auth
+    );
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/");
+        }
+
+        if (error) {
+            toast.error(error);
+            dispatch(clearErrors());
+        }
+        if (success) {
+            toast.success(message);
+            navigate("/");
+        }
+    }, [dispatch, isAuthenticated, error, success, message, navigate]);
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+
+        if (password.length < 6) {
+            setInputError("Password must be 6 or more char !!");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.set("firstName", firstName);
+        formData.set("lastName", lastName);
+        formData.set("username", username);
+        formData.set("email", email);
+        formData.set("password", password);
+
+        dispatch(register(formData));
+    };
+
+    const onChange = (e) => {
+        setUser({ ...user, [e.target.name]: e.target.value });
+    };
     return (
         <div className="min-h-full flex justify-center items-center">
             <div className="w-4/5 mx-auto">
@@ -9,14 +67,17 @@ const Register = () => {
                     <h1 className="text-center  text-xl">Sign up to E-Blood</h1>
                     <div className="flex flex-row sm:flex-col justify-between items-center gap-8 mt-3">
                         <div className="w-2/4 sm:w-full">
-                            <form>
-                                <div className="flex gap-4 flex-row sm:flex-col">
+                            <form onSubmit={submitHandler}>
+                                <div className="flex gap-3 sm:gap-0 flex-row sm:flex-col">
                                     <div className="mt-6">
                                         <label htmlFor="firstName_field">
                                             First Name
                                         </label>
                                         <input
                                             type="text"
+                                            name="firstName"
+                                            value={firstName}
+                                            onChange={onChange}
                                             className="w-full mt-1 h-8 border outline-none px-4 py-4 rounded-full"
                                         />
                                     </div>
@@ -26,6 +87,9 @@ const Register = () => {
                                         </label>
                                         <input
                                             type="text"
+                                            name="lastName"
+                                            value={lastName}
+                                            onChange={onChange}
                                             className="w-full mt-1 h-8 border outline-none px-4 py-4 rounded-full"
                                         />
                                     </div>
@@ -37,6 +101,9 @@ const Register = () => {
                                     </label>
                                     <input
                                         type="text"
+                                        name="username"
+                                        value={username}
+                                        onChange={onChange}
                                         className="w-full mt-1 h-8 border outline-none px-4 py-4 rounded-full"
                                     />
                                 </div>
@@ -46,6 +113,9 @@ const Register = () => {
                                     </label>
                                     <input
                                         type="email"
+                                        name="email"
+                                        value={email}
+                                        onChange={onChange}
                                         className="w-full mt-1 h-8 border outline-none px-4 py-4 rounded-full"
                                     />
                                 </div>
@@ -55,12 +125,21 @@ const Register = () => {
                                     </label>
                                     <input
                                         type="password"
+                                        name="password"
+                                        value={password}
+                                        onChange={onChange}
                                         className="w-full mt-1 h-8 border outline-none px-4 py-4 rounded-full"
                                     />
+                                    {inputError && (
+                                        <p className="">{inputError}</p>
+                                    )}
                                 </div>
 
                                 <div className="mt-6 text-center">
-                                    <button className="bg-golden px-4 py-2 rounded-full w-2/5 hover:bg-opacity-90 text-center">
+                                    <button
+                                        type="submit"
+                                        className="bg-golden px-4 py-2 rounded-full w-2/5 hover:bg-opacity-90 text-center"
+                                    >
                                         Sign Up
                                     </button>
                                 </div>

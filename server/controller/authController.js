@@ -29,7 +29,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     const token = createActivationToken(user);
 
     // Create reset password url
-    const resetUrl = `http://localhost:5000/activation/${token}`;
+    const resetUrl = `http://localhost:3000/activation/${token}`;
 
     const message = `<div style="max-width: 700px; margin:auto; border: 10px solid #ddd; padding: 50px 20px; font-size: 110%;">
                         <h2 style="text-align: center; text-transform: uppercase;color: teal;">Welcome to the MERN Auth app.</h2>
