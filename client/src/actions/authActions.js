@@ -4,6 +4,9 @@ import {
     ACTIVE_EMAIL_REQUEST,
     ACTIVE_EMAIL_SUCCESS,
     CLEAR_ERRORS,
+    LOGIN_FAIL,
+    LOGIN_REQUEST,
+    LOGIN_SUCCESS,
     REGISTER_USER_FAIL,
     REGISTER_USER_REQUEST,
     REGISTER_USER_SUCCESS,
@@ -60,6 +63,35 @@ export const activeEmail = (activation_token) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: ACTIVE_EMAIL_FAIL,
+            payload: error.response.data.message,
+        });
+    }
+};
+
+// Login
+export const login = (emailOrUsername, password) => async (dispatch) => {
+    try {
+        dispatch({ type: LOGIN_REQUEST });
+
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        };
+
+        const { data } = await axios.post(
+            "/api/v1/login",
+            { emailOrUsername, password },
+            config
+        );
+
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: LOGIN_FAIL,
             payload: error.response.data.message,
         });
     }

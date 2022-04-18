@@ -9,8 +9,14 @@ import About from "./pages/about/About";
 import Login from "./pages/auth/login/Login";
 import Register from "./pages/auth/register/Register";
 import ActivationEmail from "./pages/auth/ActivationEmail";
+import { useEffect } from "react";
+import store from "./store";
+import { loadUser } from "./actions/userActions";
 
 function App() {
+    useEffect(() => {
+        store.dispatch(loadUser());
+    }, []);
     return (
         <div className="app">
             <BrowserRouter>

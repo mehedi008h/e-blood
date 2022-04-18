@@ -90,6 +90,7 @@ exports.activeEmail = catchAsyncErrors(async (req, res, next) => {
 
 // Login User  =>  /api/v1/login
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
+    console.log(req.body);
     const { emailOrUsername, password } = req.body;
 
     // Checks if email and password is entered by user
