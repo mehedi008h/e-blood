@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+    clearErrors,
+    loadUser,
+    updateProfile,
+} from "../../actions/userActions";
 import Loader from "../../components/loader/Loader";
 import Sidebar from "../../components/sidebar/Sidebar";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { UPDATE_PROFILE_RESET } from "../../constants/userConstants";
+import ButtonLoader from "../../components/buttonLoader/ButtonLoader";
 
 const EditProfile = () => {
     const [firstName, setFirstName] = useState("");
@@ -21,11 +30,101 @@ const EditProfile = () => {
     const [bod, setBod] = useState("");
     const [lastDonate, setLastDonate] = useState("");
     const [bio, setBio] = useState("");
+    const [blood, setBlood] = useState("");
     const [avatar, setAvatar] = useState("");
     const [avatarPreview, setAvatarPreview] = useState(
         "https://res.cloudinary.com/mehedi08h/image/upload/v1647280872/react-final/auth/logo_wyrs86.png"
     );
-    const { loading } = useSelector((state) => state.auth);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const { user } = useSelector((state) => state.auth);
+    const { error, isUpdated, loading } = useSelector((state) => state.user);
+
+    useEffect(() => {
+        if (user) {
+            setFirstName(user.name.firstName);
+            setLastName(user.name.lastName);
+            setPhone(user.phone);
+            //permanent address
+            setPaRegion(user.permanentAddress?.region);
+            setPaCity(user.permanentAddress?.city);
+            setPaArea(user.permanentAddress?.area);
+            setPaAddress(user.permanentAddress?.address);
+            // present address
+            setPsRegion(user.presentAddress?.region);
+            setPsCity(user.presentAddress?.city);
+            setPsArea(user.presentAddress?.area);
+            setPsAddress(user.presentAddress?.address);
+
+            setBio(user.bio);
+            setBod(user.bod);
+            setGender(user.gender);
+            setLastDonate(user.lastDonateDate);
+            setWork(user.work);
+            setBlood(user.bloodGroup);
+
+            setAvatarPreview(user.avatar?.url);
+        }
+
+        if (error) {
+            toast.error(error);
+            dispatch(clearErrors());
+        }
+
+        if (isUpdated) {
+            toast.success("User updated successfully");
+            dispatch(loadUser());
+
+            navigate("/me");
+
+            dispatch({
+                type: UPDATE_PROFILE_RESET,
+            });
+        }
+    }, [dispatch, user, navigate, error, isUpdated]);
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.set("firstName", firstName);
+        formData.set("lastName", lastName);
+        formData.set("phone", phone);
+        formData.set("work", work);
+        formData.set("bloodGroup", blood);
+        formData.set("lastDonateDate", lastDonate);
+        formData.set("gender", gender);
+        formData.set("bio", bio);
+        formData.set("bod", bod);
+        // present
+        formData.set("psRegion", psRegion);
+        formData.set("psCity", psCity);
+        formData.set("psArea", psArea);
+        formData.set("psAddress", psAddress);
+        // permanent
+        formData.set("paRegion", paRegion);
+        formData.set("paCity", paCity);
+        formData.set("paArea", paArea);
+        formData.set("paAddress", paAddress);
+        formData.set("avatar", avatar);
+
+        dispatch(updateProfile(formData));
+    };
+
+    const onChange = (e) => {
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            if (reader.readyState === 2) {
+                setAvatarPreview(reader.result);
+                setAvatar(reader.result);
+            }
+        };
+
+        reader.readAsDataURL(e.target.files[0]);
+    };
 
     const genders = ["Male", "Female", "Other"];
     const bloods = ["O+", "A+", "B+", "AB+", "O-", "A-", "B-", "AB-"];
@@ -43,7 +142,10 @@ const EditProfile = () => {
                             <div className="w-full bg-white shadow rounded-xl border-2 border-white p-4">
                                 <h3>Update Profile</h3>
                                 <div className="p-4">
-                                    <form>
+                                    <form
+                                        onSubmit={submitHandler}
+                                        encType="multipart/form-data"
+                                    >
                                         <div className="flex flex-row sm:flex-col gap-4">
                                             <div className="w-64 sm:w-full">
                                                 <div className="flex flex-col items-center justify-center">
@@ -57,7 +159,13 @@ const EditProfile = () => {
                                                         }}
                                                     />
                                                     <div className="image_file mt-5">
-                                                        <input type="file" />
+                                                        <input
+                                                            type="file"
+                                                            name="avatar"
+                                                            id="customFile"
+                                                            accept="iamges/*"
+                                                            onChange={onChange}
+                                                        />
                                                         <AiOutlineCloudUpload
                                                             size={20}
                                                         />
@@ -73,6 +181,14 @@ const EditProfile = () => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            name="firstName"
+                                                            value={firstName}
+                                                            onChange={(e) =>
+                                                                setFirstName(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                             className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                         />
                                                     </div>
@@ -83,6 +199,14 @@ const EditProfile = () => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            name="lastName"
+                                                            value={lastName}
+                                                            onChange={(e) =>
+                                                                setLastName(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                             className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                         />
                                                     </div>
@@ -93,6 +217,14 @@ const EditProfile = () => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            name="phone"
+                                                            value={phone}
+                                                            onChange={(e) =>
+                                                                setPhone(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                             className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                         />
                                                     </div>
@@ -103,6 +235,14 @@ const EditProfile = () => {
                                                         </label>
                                                         <input
                                                             type="text"
+                                                            name="work"
+                                                            value={work}
+                                                            onChange={(e) =>
+                                                                setWork(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                             className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                         />
                                                     </div>
@@ -113,6 +253,13 @@ const EditProfile = () => {
                                                         </label>
                                                         <select
                                                             id="gender_field"
+                                                            value={gender}
+                                                            onChange={(e) =>
+                                                                setGender(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                             className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                         >
                                                             {genders.map(
@@ -138,6 +285,13 @@ const EditProfile = () => {
                                                         </label>
                                                         <select
                                                             id="blood_field"
+                                                            value={blood}
+                                                            onChange={(e) =>
+                                                                setBlood(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                             className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                         >
                                                             {bloods.map(
@@ -163,6 +317,14 @@ const EditProfile = () => {
                                                         </label>
                                                         <input
                                                             type="date"
+                                                            name="bod"
+                                                            value={bod}
+                                                            onChange={(e) =>
+                                                                setBod(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                             className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                         />
                                                     </div>
@@ -174,6 +336,14 @@ const EditProfile = () => {
                                                         </label>
                                                         <input
                                                             type="date"
+                                                            name="lastDonate"
+                                                            value={lastDonate}
+                                                            onChange={(e) =>
+                                                                setLastDonate(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                             className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                         />
                                                     </div>
@@ -191,6 +361,14 @@ const EditProfile = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
+                                                                name="paRegion"
+                                                                value={paRegion}
+                                                                onChange={(e) =>
+                                                                    setPaRegion(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                             />
                                                         </div>
@@ -201,6 +379,14 @@ const EditProfile = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
+                                                                name="paCity"
+                                                                value={paCity}
+                                                                onChange={(e) =>
+                                                                    setPaCity(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                             />
                                                         </div>
@@ -211,6 +397,14 @@ const EditProfile = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
+                                                                name="paArea"
+                                                                value={paArea}
+                                                                onChange={(e) =>
+                                                                    setPaArea(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                             />
                                                         </div>
@@ -221,6 +415,16 @@ const EditProfile = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
+                                                                name="paAddress"
+                                                                value={
+                                                                    paAddress
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setPaAddress(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                             />
                                                         </div>
@@ -241,6 +445,14 @@ const EditProfile = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
+                                                                name="psRegion"
+                                                                value={psRegion}
+                                                                onChange={(e) =>
+                                                                    setPsRegion(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                             />
                                                         </div>
@@ -251,6 +463,14 @@ const EditProfile = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
+                                                                name="psCity"
+                                                                value={psCity}
+                                                                onChange={(e) =>
+                                                                    setPsCity(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                             />
                                                         </div>
@@ -261,6 +481,14 @@ const EditProfile = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
+                                                                name="psArea"
+                                                                value={psArea}
+                                                                onChange={(e) =>
+                                                                    setPsArea(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                             />
                                                         </div>
@@ -271,6 +499,16 @@ const EditProfile = () => {
                                                             </label>
                                                             <input
                                                                 type="text"
+                                                                name="psAddress"
+                                                                value={
+                                                                    psAddress
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setPsAddress(
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
                                                                 className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
                                                             />
                                                         </div>
@@ -283,7 +521,13 @@ const EditProfile = () => {
                                                     <hr className="my-2" />
                                                     <textarea
                                                         className="w-full mt-3 h-24 border outline-none px-4 py-4 rounded-md"
-                                                        name=""
+                                                        name="boi"
+                                                        value={bio}
+                                                        onChange={(e) =>
+                                                            setBio(
+                                                                e.target.value
+                                                            )
+                                                        }
                                                         id=""
                                                     ></textarea>
                                                 </div>
@@ -295,7 +539,11 @@ const EditProfile = () => {
                                                 type="submit"
                                                 className="bg-golden px-4 py-2 rounded-full w-2/5 hover:bg-opacity-90 text-center"
                                             >
-                                                update
+                                                {loading ? (
+                                                    <ButtonLoader />
+                                                ) : (
+                                                    "Update Profile"
+                                                )}
                                             </button>
                                         </div>
                                     </form>
