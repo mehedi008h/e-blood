@@ -46,7 +46,7 @@ const Sidebar = () => {
                     <li className="px-6 py-2 my-2 rounded-md hover:bg-glass">
                         <Link
                             className="text-grey flex items-center font-semibold tracking-wide"
-                            to="/me"
+                            to="/profile/update"
                         >
                             <AiOutlineEdit
                                 className="mr-4"

@@ -153,6 +153,7 @@ const userSchema = new mongoose.Schema({
     enable: {
         type: Boolean,
         required: [false, "Please enable if you are avaliable to donate Blood"],
+        default: true,
     },
 
     // last blood donate date
