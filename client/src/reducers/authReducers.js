@@ -3,6 +3,9 @@ import {
     ACTIVE_EMAIL_REQUEST,
     ACTIVE_EMAIL_SUCCESS,
     CLEAR_ERRORS,
+    LOAD_USER_FAIL,
+    LOAD_USER_REQUEST,
+    LOAD_USER_SUCCESS,
     LOGIN_FAIL,
     LOGIN_REQUEST,
     LOGIN_SUCCESS,
@@ -16,11 +19,13 @@ export const authReducer = (state = { user: {} }, action) => {
         case LOGIN_REQUEST:
         case REGISTER_USER_REQUEST:
         case ACTIVE_EMAIL_REQUEST:
+        case LOAD_USER_REQUEST:
             return {
                 loading: true,
                 isAuthenticated: false,
             };
         case LOGIN_SUCCESS:
+        case LOAD_USER_SUCCESS:
             return {
                 ...state,
                 loading: false,
@@ -31,7 +36,7 @@ export const authReducer = (state = { user: {} }, action) => {
             return {
                 ...state,
                 loading: false,
-                isAuthenticated: false,
+                isAuthenticated: true,
                 success: action.payload.success,
                 message: action.payload.message,
             };
@@ -43,6 +48,13 @@ export const authReducer = (state = { user: {} }, action) => {
                 isAuthenticated: true,
                 success: action.payload.success,
                 user: action.payload.user,
+            };
+        case LOAD_USER_FAIL:
+            return {
+                loading: false,
+                isAuthenticated: false,
+                user: null,
+                error: action.payload,
             };
 
         case LOGIN_FAIL:

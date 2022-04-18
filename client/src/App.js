@@ -12,6 +12,8 @@ import ActivationEmail from "./pages/auth/ActivationEmail";
 import { useEffect } from "react";
 import store from "./store";
 import { loadUser } from "./actions/userActions";
+import ProtectedRoute from "./components/route/ProtectedRoute";
+import Profile from "./pages/profile/Profile";
 
 function App() {
     useEffect(() => {
@@ -40,6 +42,14 @@ function App() {
                     <Route
                         path="/activation/:token"
                         element={<ActivationEmail />}
+                    />
+                    <Route
+                        path="/me"
+                        element={
+                            <ProtectedRoute>
+                                <Profile />
+                            </ProtectedRoute>
+                        }
                     />
                 </Routes>
             </BrowserRouter>

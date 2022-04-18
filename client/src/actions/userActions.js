@@ -4,7 +4,7 @@ import {
     LOAD_USER_FAIL,
     LOAD_USER_REQUEST,
     LOAD_USER_SUCCESS,
-} from "../constants/userConstants";
+} from "../constants/authConstants";
 // Load user
 export const loadUser = () => async (dispatch) => {
     try {

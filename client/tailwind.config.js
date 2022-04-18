@@ -5,6 +5,8 @@ module.exports = {
             golden: "#dcca87",
             black: "#0c0c0c",
             white: "#fff",
+            glass: "rgba(230, 228, 228, 0.25)",
+            grey: "#383838",
         },
         fontFamily: {
             lato: ["Lato", "sans-serif"],
@@ -31,7 +33,11 @@ module.exports = {
             sm: { max: "639px" },
             // => @media (max-width: 639px) { ... }
         },
-        extend: {},
+        extend: {
+            boxShadow: {
+                shadow: "0 8px 32px 0 rgba(31, 38, 135, 0.37)",
+            },
+        },
     },
     plugins: [],
 };
