@@ -41,6 +41,8 @@ const EditProfile = () => {
     const { user } = useSelector((state) => state.auth);
     const { error, isUpdated, loading } = useSelector((state) => state.user);
 
+    console.log(bio);
+
     useEffect(() => {
         if (user) {
             setFirstName(user.name?.firstName);
@@ -129,8 +131,8 @@ const EditProfile = () => {
     const bloods = ["O+", "A+", "B+", "AB+", "O-", "A-", "B-", "AB-"];
     return (
         <div className="min-h-full flex">
-            <div className="w-4/5 mx-auto my-8">
-                <div className="flex gap-4">
+            <div className="w-4/5 sm:w-full sm:p-2 mx-auto my-8">
+                <div className="flex flex-row sm:flex-col gap-4">
                     <div>
                         <Sidebar />
                     </div>
@@ -168,7 +170,7 @@ const EditProfile = () => {
                                         </div>
                                     </div>
                                     <div className="grid grid-cols-1 gap-4">
-                                        <div className="grid grid-cols-2 gap-4">
+                                        <div className="grid grid-cols-2 sm:grid-cols-1 gap-4">
                                             {/* name section  */}
                                             <div className="">
                                                 <label htmlFor="firstName_field">
@@ -320,7 +322,7 @@ const EditProfile = () => {
                                                 Parmanent Address
                                             </h3>
                                             <hr className="my-2" />
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid grid-cols-2 sm:grid-cols-1 gap-4">
                                                 {/* region section  */}
                                                 <div className="">
                                                     <label htmlFor="region_field">
@@ -398,7 +400,7 @@ const EditProfile = () => {
                                                 Present Address
                                             </h3>
                                             <hr className="my-2" />
-                                            <div className="grid grid-cols-2 gap-4">
+                                            <div className="grid grid-cols-2 sm:grid-cols-1 gap-4">
                                                 {/* region section  */}
                                                 <div className="">
                                                     <label htmlFor="region_field">
@@ -490,7 +492,7 @@ const EditProfile = () => {
                                 <div className="mt-6 text-center">
                                     <button
                                         type="submit"
-                                        className="bg-golden px-4 py-2 rounded-full w-2/5 hover:bg-opacity-90 text-center"
+                                        className="bg-golden px-4 py-2 rounded-full w-2/5 sm:w-full hover:bg-opacity-90 text-center"
                                     >
                                         {loading ? (
                                             <ButtonLoader />

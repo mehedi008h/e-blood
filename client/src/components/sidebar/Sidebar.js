@@ -7,11 +7,15 @@ import { AiOutlineUser, AiOutlineEdit } from "react-icons/ai";
 const Sidebar = () => {
     const { user } = useSelector((state) => state.auth);
     return (
-        <div className="w-64 bg-white shadow rounded-xl border-2 border-white">
+        <div className="w-64 sm:w-full bg-white shadow rounded-xl border-2 border-white">
             <div className="flex flex-col items-center justify-center p-4">
                 {user && user.avatar ? (
                     <>
-                        <img className="w-16 h-16 rounded-full" src="" alt="" />
+                        <img
+                            className="w-24 h-24 rounded-full"
+                            src={user?.avatar?.url}
+                            alt={user?.name?.firstName}
+                        />
                     </>
                 ) : (
                     <>

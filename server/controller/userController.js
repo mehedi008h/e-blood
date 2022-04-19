@@ -51,7 +51,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
             area: req.body.psArea,
             address: req.body.psAddress,
         },
-        boi: req.body.boi,
+        bio: req.body.bio,
         bod: req.body.bod,
         work: req.body.work,
         gender: req.body.gender,
