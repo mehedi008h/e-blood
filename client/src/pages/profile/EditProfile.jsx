@@ -6,7 +6,6 @@ import {
     loadUser,
     updateProfile,
 } from "../../actions/userActions";
-import Loader from "../../components/loader/Loader";
 import Sidebar from "../../components/sidebar/Sidebar";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -44,8 +43,8 @@ const EditProfile = () => {
 
     useEffect(() => {
         if (user) {
-            setFirstName(user.name.firstName);
-            setLastName(user.name.lastName);
+            setFirstName(user.name?.firstName);
+            setLastName(user.name?.lastName);
             setPhone(user.phone);
             //permanent address
             setPaRegion(user.permanentAddress?.region);
@@ -77,7 +76,7 @@ const EditProfile = () => {
             toast.success("User updated successfully");
             dispatch(loadUser());
 
-            navigate("/me");
+            navigate("/profile/update");
 
             dispatch({
                 type: UPDATE_PROFILE_RESET,
@@ -130,429 +129,381 @@ const EditProfile = () => {
     const bloods = ["O+", "A+", "B+", "AB+", "O-", "A-", "B-", "AB-"];
     return (
         <div className="min-h-full flex">
-            {loading ? (
-                <Loader />
-            ) : (
-                <>
-                    <div className="w-4/5 mx-auto my-8">
-                        <div className="flex gap-4">
-                            <div>
-                                <Sidebar />
-                            </div>
-                            <div className="w-full bg-white shadow rounded-xl border-2 border-white p-4">
-                                <h3>Update Profile</h3>
-                                <div className="p-4">
-                                    <form
-                                        onSubmit={submitHandler}
-                                        encType="multipart/form-data"
-                                    >
-                                        <div className="flex flex-row sm:flex-col gap-4">
-                                            <div className="w-64 sm:w-full">
-                                                <div className="flex flex-col items-center justify-center">
-                                                    <img
-                                                        src={avatarPreview}
-                                                        alt="Avatar Preview"
-                                                        style={{
-                                                            width: "120px",
-                                                            height: "120px",
-                                                            borderRadius: "50%",
-                                                        }}
-                                                    />
-                                                    <div className="image_file mt-5">
-                                                        <input
-                                                            type="file"
-                                                            name="avatar"
-                                                            id="customFile"
-                                                            accept="iamges/*"
-                                                            onChange={onChange}
-                                                        />
-                                                        <AiOutlineCloudUpload
-                                                            size={20}
-                                                        />
-                                                    </div>
-                                                </div>
+            <div className="w-4/5 mx-auto my-8">
+                <div className="flex gap-4">
+                    <div>
+                        <Sidebar />
+                    </div>
+                    <div className="w-full bg-white shadow rounded-xl border-2 border-white p-4">
+                        <h3>Update Profile</h3>
+                        <div className="p-4">
+                            <form
+                                onSubmit={submitHandler}
+                                encType="multipart/form-data"
+                            >
+                                <div className="flex flex-row sm:flex-col gap-4">
+                                    <div className="w-64 sm:w-full">
+                                        <div className="flex flex-col items-center justify-center">
+                                            <img
+                                                src={avatarPreview}
+                                                alt="Avatar Preview"
+                                                style={{
+                                                    width: "120px",
+                                                    height: "120px",
+                                                    borderRadius: "50%",
+                                                }}
+                                            />
+                                            <div className="image_file mt-5">
+                                                <input
+                                                    type="file"
+                                                    name="avatar"
+                                                    id="customFile"
+                                                    accept="iamges/*"
+                                                    onChange={onChange}
+                                                />
+                                                <AiOutlineCloudUpload
+                                                    size={20}
+                                                />
                                             </div>
-                                            <div className="grid grid-cols-1 gap-4">
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    {/* name section  */}
-                                                    <div className="">
-                                                        <label htmlFor="firstName_field">
-                                                            First Name
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            name="firstName"
-                                                            value={firstName}
-                                                            onChange={(e) =>
-                                                                setFirstName(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                        />
-                                                    </div>
-                                                    {/* name section  */}
-                                                    <div className="">
-                                                        <label htmlFor="lastName_field">
-                                                            Last Name
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            name="lastName"
-                                                            value={lastName}
-                                                            onChange={(e) =>
-                                                                setLastName(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                        />
-                                                    </div>
-                                                    {/* phone section  */}
-                                                    <div className="">
-                                                        <label htmlFor="phone_field">
-                                                            Phone
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            name="phone"
-                                                            value={phone}
-                                                            onChange={(e) =>
-                                                                setPhone(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                        />
-                                                    </div>
-                                                    {/* work section  */}
-                                                    <div className="">
-                                                        <label htmlFor="work_field">
-                                                            Work
-                                                        </label>
-                                                        <input
-                                                            type="text"
-                                                            name="work"
-                                                            value={work}
-                                                            onChange={(e) =>
-                                                                setWork(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                        />
-                                                    </div>
-                                                    {/* gender section  */}
-                                                    <div className="">
-                                                        <label htmlFor="gender_field">
-                                                            Gender
-                                                        </label>
-                                                        <select
-                                                            id="gender_field"
-                                                            value={gender}
-                                                            onChange={(e) =>
-                                                                setGender(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-1 gap-4">
+                                        <div className="grid grid-cols-2 gap-4">
+                                            {/* name section  */}
+                                            <div className="">
+                                                <label htmlFor="firstName_field">
+                                                    First Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="firstName"
+                                                    value={firstName}
+                                                    onChange={(e) =>
+                                                        setFirstName(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                />
+                                            </div>
+                                            {/* name section  */}
+                                            <div className="">
+                                                <label htmlFor="lastName_field">
+                                                    Last Name
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="lastName"
+                                                    value={lastName}
+                                                    onChange={(e) =>
+                                                        setLastName(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                />
+                                            </div>
+                                            {/* phone section  */}
+                                            <div className="">
+                                                <label htmlFor="phone_field">
+                                                    Phone
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="phone"
+                                                    value={phone}
+                                                    onChange={(e) =>
+                                                        setPhone(e.target.value)
+                                                    }
+                                                    className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                />
+                                            </div>
+                                            {/* work section  */}
+                                            <div className="">
+                                                <label htmlFor="work_field">
+                                                    Work
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    name="work"
+                                                    value={work}
+                                                    onChange={(e) =>
+                                                        setWork(e.target.value)
+                                                    }
+                                                    className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                />
+                                            </div>
+                                            {/* gender section  */}
+                                            <div className="">
+                                                <label htmlFor="gender_field">
+                                                    Gender
+                                                </label>
+                                                <select
+                                                    id="gender_field"
+                                                    value={gender}
+                                                    name="gender"
+                                                    onChange={(e) =>
+                                                        setGender(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className="w-full mt-3 h-8 border outline-none px-4 rounded-full"
+                                                >
+                                                    {genders.map((type) => (
+                                                        <option
+                                                            key={type}
+                                                            value={type}
                                                         >
-                                                            {genders.map(
-                                                                (type) => (
-                                                                    <option
-                                                                        key={
-                                                                            type
-                                                                        }
-                                                                        value={
-                                                                            type
-                                                                        }
-                                                                    >
-                                                                        {type}
-                                                                    </option>
-                                                                )
-                                                            )}
-                                                        </select>
-                                                    </div>
-                                                    {/* blood group section  */}
-                                                    <div className="">
-                                                        <label htmlFor="blood_field">
-                                                            Blood Group
-                                                        </label>
-                                                        <select
-                                                            id="blood_field"
-                                                            value={blood}
-                                                            onChange={(e) =>
-                                                                setBlood(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                            {type}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            {/* blood group section  */}
+                                            <div className="">
+                                                <label htmlFor="blood_field">
+                                                    Blood Group
+                                                </label>
+                                                <select
+                                                    id="blood_field"
+                                                    value={blood}
+                                                    onChange={(e) =>
+                                                        setBlood(e.target.value)
+                                                    }
+                                                    className="w-full mt-3 h-8 border outline-none px-4  rounded-full"
+                                                >
+                                                    {bloods.map((type) => (
+                                                        <option
+                                                            key={type}
+                                                            value={type}
                                                         >
-                                                            {bloods.map(
-                                                                (type) => (
-                                                                    <option
-                                                                        key={
-                                                                            type
-                                                                        }
-                                                                        value={
-                                                                            type
-                                                                        }
-                                                                    >
-                                                                        {type}
-                                                                    </option>
-                                                                )
-                                                            )}
-                                                        </select>
-                                                    </div>
-                                                    {/* bod section  */}
-                                                    <div className="">
-                                                        <label htmlFor="bod_field">
-                                                            Birth of Date
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            name="bod"
-                                                            value={bod}
-                                                            onChange={(e) =>
-                                                                setBod(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                        />
-                                                    </div>
-                                                    {/* last donate date section  */}
-                                                    <div className="">
-                                                        <label htmlFor="lbdd_field">
-                                                            Last Blood Donate
-                                                            Date
-                                                        </label>
-                                                        <input
-                                                            type="date"
-                                                            name="lastDonate"
-                                                            value={lastDonate}
-                                                            onChange={(e) =>
-                                                                setLastDonate(
-                                                                    e.target
-                                                                        .value
-                                                                )
-                                                            }
-                                                            className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-semibold">
-                                                        Parmanent Address
-                                                    </h3>
-                                                    <hr className="my-2" />
-                                                    <div className="grid grid-cols-2 gap-4">
-                                                        {/* region section  */}
-                                                        <div className="">
-                                                            <label htmlFor="region_field">
-                                                                Region
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="paRegion"
-                                                                value={paRegion}
-                                                                onChange={(e) =>
-                                                                    setPaRegion(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                            />
-                                                        </div>
-                                                        {/* city section  */}
-                                                        <div className="">
-                                                            <label htmlFor="city_field">
-                                                                City
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="paCity"
-                                                                value={paCity}
-                                                                onChange={(e) =>
-                                                                    setPaCity(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                            />
-                                                        </div>
-                                                        {/* area section  */}
-                                                        <div className="">
-                                                            <label htmlFor="area_field">
-                                                                Area
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="paArea"
-                                                                value={paArea}
-                                                                onChange={(e) =>
-                                                                    setPaArea(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                            />
-                                                        </div>
-                                                        {/* address section  */}
-                                                        <div className="">
-                                                            <label htmlFor="address_field">
-                                                                Address
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="paAddress"
-                                                                value={
-                                                                    paAddress
-                                                                }
-                                                                onChange={(e) =>
-                                                                    setPaAddress(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {/* present address  */}
-                                                <div>
-                                                    <h3 className="font-semibold">
-                                                        Present Address
-                                                    </h3>
-                                                    <hr className="my-2" />
-                                                    <div className="grid grid-cols-2 gap-4">
-                                                        {/* region section  */}
-                                                        <div className="">
-                                                            <label htmlFor="region_field">
-                                                                Region
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="psRegion"
-                                                                value={psRegion}
-                                                                onChange={(e) =>
-                                                                    setPsRegion(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                            />
-                                                        </div>
-                                                        {/* city section  */}
-                                                        <div className="">
-                                                            <label htmlFor="city_field">
-                                                                City
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="psCity"
-                                                                value={psCity}
-                                                                onChange={(e) =>
-                                                                    setPsCity(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                            />
-                                                        </div>
-                                                        {/* area section  */}
-                                                        <div className="">
-                                                            <label htmlFor="area_field">
-                                                                Area
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="psArea"
-                                                                value={psArea}
-                                                                onChange={(e) =>
-                                                                    setPsArea(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                            />
-                                                        </div>
-                                                        {/* address section  */}
-                                                        <div className="">
-                                                            <label htmlFor="address_field">
-                                                                Address
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                name="psAddress"
-                                                                value={
-                                                                    psAddress
-                                                                }
-                                                                onChange={(e) =>
-                                                                    setPsAddress(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <h3 className="font-semibold">
-                                                        Bio
-                                                    </h3>
-                                                    <hr className="my-2" />
-                                                    <textarea
-                                                        className="w-full mt-3 h-24 border outline-none px-4 py-4 rounded-md"
-                                                        name="boi"
-                                                        value={bio}
+                                                            {type}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                            {/* bod section  */}
+                                            <div className="">
+                                                <label htmlFor="bod_field">
+                                                    Birth of Date
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    // name="bod"
+                                                    value={bod}
+                                                    onChange={(e) =>
+                                                        setBod(e.target.value)
+                                                    }
+                                                    className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                />
+                                            </div>
+                                            {/* last donate date section  */}
+                                            <div className="">
+                                                <label htmlFor="lbdd_field">
+                                                    Last Blood Donate Date
+                                                </label>
+                                                <input
+                                                    type="date"
+                                                    name="lastDonate"
+                                                    value={lastDonate}
+                                                    onChange={(e) =>
+                                                        setLastDonate(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold">
+                                                Parmanent Address
+                                            </h3>
+                                            <hr className="my-2" />
+                                            <div className="grid grid-cols-2 gap-4">
+                                                {/* region section  */}
+                                                <div className="">
+                                                    <label htmlFor="region_field">
+                                                        Region
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="paRegion"
+                                                        value={paRegion}
                                                         onChange={(e) =>
-                                                            setBio(
+                                                            setPaRegion(
                                                                 e.target.value
                                                             )
                                                         }
-                                                        id=""
-                                                    ></textarea>
+                                                        className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                    />
+                                                </div>
+                                                {/* city section  */}
+                                                <div className="">
+                                                    <label htmlFor="city_field">
+                                                        City
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="paCity"
+                                                        value={paCity}
+                                                        onChange={(e) =>
+                                                            setPaCity(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                    />
+                                                </div>
+                                                {/* area section  */}
+                                                <div className="">
+                                                    <label htmlFor="area_field">
+                                                        Area
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="paArea"
+                                                        value={paArea}
+                                                        onChange={(e) =>
+                                                            setPaArea(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                    />
+                                                </div>
+                                                {/* address section  */}
+                                                <div className="">
+                                                    <label htmlFor="address_field">
+                                                        Address
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="paAddress"
+                                                        value={paAddress}
+                                                        onChange={(e) =>
+                                                            setPaAddress(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="mt-6 text-center">
-                                            <button
-                                                type="submit"
-                                                className="bg-golden px-4 py-2 rounded-full w-2/5 hover:bg-opacity-90 text-center"
-                                            >
-                                                {loading ? (
-                                                    <ButtonLoader />
-                                                ) : (
-                                                    "Update Profile"
-                                                )}
-                                            </button>
+                                        {/* present address  */}
+                                        <div>
+                                            <h3 className="font-semibold">
+                                                Present Address
+                                            </h3>
+                                            <hr className="my-2" />
+                                            <div className="grid grid-cols-2 gap-4">
+                                                {/* region section  */}
+                                                <div className="">
+                                                    <label htmlFor="region_field">
+                                                        Region
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="psRegion"
+                                                        value={psRegion}
+                                                        onChange={(e) =>
+                                                            setPsRegion(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                    />
+                                                </div>
+                                                {/* city section  */}
+                                                <div className="">
+                                                    <label htmlFor="city_field">
+                                                        City
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="psCity"
+                                                        value={psCity}
+                                                        onChange={(e) =>
+                                                            setPsCity(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                    />
+                                                </div>
+                                                {/* area section  */}
+                                                <div className="">
+                                                    <label htmlFor="area_field">
+                                                        Area
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="psArea"
+                                                        value={psArea}
+                                                        onChange={(e) =>
+                                                            setPsArea(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                    />
+                                                </div>
+                                                {/* address section  */}
+                                                <div className="">
+                                                    <label htmlFor="address_field">
+                                                        Address
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="psAddress"
+                                                        value={psAddress}
+                                                        onChange={(e) =>
+                                                            setPsAddress(
+                                                                e.target.value
+                                                            )
+                                                        }
+                                                        className="w-full mt-3 h-8 border outline-none px-4 py-4 rounded-full"
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
-                                    </form>
+                                        <div>
+                                            <h3 className="font-semibold">
+                                                Bio
+                                            </h3>
+                                            <hr className="my-2" />
+                                            <textarea
+                                                className="w-full mt-3 h-24 border outline-none px-4 py-4 rounded-md"
+                                                name="boi"
+                                                value={bio}
+                                                onChange={(e) =>
+                                                    setBio(e.target.value)
+                                                }
+                                                id=""
+                                            ></textarea>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+
+                                <div className="mt-6 text-center">
+                                    <button
+                                        type="submit"
+                                        className="bg-golden px-4 py-2 rounded-full w-2/5 hover:bg-opacity-90 text-center"
+                                    >
+                                        {loading ? (
+                                            <ButtonLoader />
+                                        ) : (
+                                            "Update Profile"
+                                        )}
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </>
-            )}
+                </div>
+            </div>
         </div>
     );
 };
