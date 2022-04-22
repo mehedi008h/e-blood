@@ -28,9 +28,11 @@ cloudinary.config({
 // import all routes
 const auth = require("./routes/auth");
 const user = require("./routes/user");
+const post = require("./routes/post");
 
 app.use("/api/v1", auth);
 app.use("/api/v1", user);
+app.use("/api/v1", post);
 
 app.use("/", (req, res) => {
     res.send("App is running.");
