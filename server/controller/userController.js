@@ -4,9 +4,32 @@ const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const sendToken = require("../utils/jwtToken");
 const cloudinary = require("cloudinary");
 
+const Moment = require("moment");
+const { extendMoment } = require("moment-range");
+
+const moment = extendMoment(Moment);
+
 // Get currently logged in user details   =>   /api/v1/me
 exports.getUserProfile = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.user.id);
+
+    // calculate time diff
+    const timeDiffernece = moment().utcOffset() / 60;
+
+    const checkInDate = moment(user.lastDonateDate).add(
+        timeDiffernece,
+        "hours"
+    );
+
+    const today = new Date();
+
+    const range = moment.range(moment(checkInDate), moment(today));
+
+    const dates = Array.from(range.by("day"));
+
+    let remaning = dates.length;
+
+    user.remaning = remaning;
 
     res.status(200).json({
         success: true,
@@ -32,7 +55,6 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 
 // Update user profile   =>   /api/v1/me/update
 exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
-    console.log(req.body);
     const newUserData = {
         name: {
             firstName: req.body.firstName,
@@ -53,6 +75,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
         },
         bio: req.body.bio,
         bod: req.body.bod,
+        lastDonateDate: req.body.lastDonateDate,
         work: req.body.work,
         gender: req.body.gender,
         bloodGroup: req.body.bloodGroup,

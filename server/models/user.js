@@ -148,7 +148,12 @@ const userSchema = new mongoose.Schema({
             message: "Please select correct Blood Group",
         },
     },
-
+    // enable for donate blood
+    remaning: {
+        type: Number,
+        required: [false, "Please enable if you are avaliable to donate Blood"],
+        default: 0,
+    },
     // enable for donate blood
     enable: {
         type: Boolean,

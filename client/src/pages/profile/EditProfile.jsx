@@ -9,6 +9,7 @@ import {
 import Sidebar from "../../components/sidebar/Sidebar";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 import { UPDATE_PROFILE_RESET } from "../../constants/userConstants";
 import ButtonLoader from "../../components/buttonLoader/ButtonLoader";
 
@@ -35,6 +36,7 @@ const EditProfile = () => {
         "https://res.cloudinary.com/mehedi08h/image/upload/v1647280872/react-final/auth/logo_wyrs86.png"
     );
 
+    console.log(moment(bod).format("MM/DD/YYYY"));
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -60,7 +62,7 @@ const EditProfile = () => {
             setPsAddress(user.presentAddress?.address);
 
             setBio(user.bio);
-            setBod(user.bod);
+            setBod(moment(user.bod).format("MM-DD-YYYY"));
             setGender(user.gender);
             setLastDonate(user.lastDonateDate);
             setWork(user.work);

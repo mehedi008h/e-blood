@@ -3,14 +3,19 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Loader from "../../components/loader/Loader";
 import Sidebar from "../../components/sidebar/Sidebar";
+import moment from "moment";
 
 import { BiUser } from "react-icons/bi";
-import { AiOutlineMail } from "react-icons/ai";
+import { MdOutlineBloodtype } from "react-icons/md";
+import { BsCalendar2Date, BsGenderAmbiguous } from "react-icons/bs";
+import { FaBirthdayCake } from "react-icons/fa";
+import { CgWorkAlt } from "react-icons/cg";
+import { AiOutlineMail, AiOutlinePhone } from "react-icons/ai";
 
 const Profile = () => {
     const { loading, user } = useSelector((state) => state.auth);
     return (
-        <div className="min-h-full">
+        <div className="min-h-full flex">
             {loading ? (
                 <Loader />
             ) : (
@@ -44,6 +49,9 @@ const Profile = () => {
                                                 </span>
                                             </h3>
                                             <p className="mt-3">{user?.bio}</p>
+                                            <p className="mt-3">
+                                                {user?.remaning}
+                                            </p>
                                         </div>
                                     </div>
                                     <div className="col-span-2">
@@ -52,46 +60,80 @@ const Profile = () => {
                                                 Personal Infirmation
                                                 {/* <hr /> */}
                                             </div>
-                                            <div className="col-span-1 sm:hidden">
-                                                <ul>
-                                                    <li className="m-2">
-                                                        <BiUser size={20} />
-                                                    </li>
-                                                    <li className="m-2">
-                                                        <BiUser size={20} />
-                                                    </li>
-                                                    <li className="m-2">
-                                                        <AiOutlineMail
-                                                            size={20}
-                                                        />
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="col-span-1">
-                                                <ul>
-                                                    <li className="font-medium m-2">
-                                                        Name
-                                                    </li>
-                                                    <li className="font-medium m-2">
-                                                        Username
-                                                    </li>
-                                                    <li className="font-medium m-2">
-                                                        Email
-                                                    </li>
-                                                </ul>
+                                            <div className="col-span-2">
+                                                <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                    <BiUser size={20} /> Name
+                                                </li>
+                                                <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                    <BiUser size={20} />{" "}
+                                                    Username
+                                                </li>
+                                                <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                    <AiOutlineMail size={20} />{" "}
+                                                    Email
+                                                </li>
+                                                <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                    <AiOutlinePhone size={20} />{" "}
+                                                    Phone
+                                                </li>
+                                                <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                    <CgWorkAlt size={20} /> Work
+                                                </li>
+                                                <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                    <FaBirthdayCake size={20} />{" "}
+                                                    Birth Date
+                                                </li>
+                                                <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                    <BsCalendar2Date
+                                                        size={20}
+                                                    />{" "}
+                                                    Last Donate Date
+                                                </li>
+                                                <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                    <MdOutlineBloodtype
+                                                        size={20}
+                                                    />{" "}
+                                                    Blood Group
+                                                </li>
+                                                <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                    <BsGenderAmbiguous
+                                                        size={20}
+                                                    />
+                                                    Gender
+                                                </li>
                                             </div>
                                             <div className="col-span-2">
-                                                <ul>
-                                                    <li className="m-2">
-                                                        {`${user?.name?.firstName} ${user?.name?.lastName}`}
-                                                    </li>
-                                                    <li className="m-2">
-                                                        {user?.username}
-                                                    </li>
-                                                    <li className="m-2">
-                                                        {user?.email}
-                                                    </li>
-                                                </ul>
+                                                <li className="m-2 list-none">
+                                                    {`${user?.name?.firstName} ${user?.name?.lastName}`}
+                                                </li>
+                                                <li className="m-2 list-none">
+                                                    {user?.username}
+                                                </li>
+                                                <li className="m-2 list-none">
+                                                    {user?.email}
+                                                </li>
+                                                <li className="m-2 list-none">
+                                                    {user?.phone}
+                                                </li>
+                                                <li className="m-2 list-none">
+                                                    {user?.work}
+                                                </li>
+                                                <li className="m-2 list-none">
+                                                    {moment(user?.bod).format(
+                                                        "MMMM d, YYYY"
+                                                    )}
+                                                </li>
+                                                <li className="m-2 list-none">
+                                                    {moment(
+                                                        user?.lastDonateDate
+                                                    ).format("MMMM d, YYYY")}
+                                                </li>
+                                                <li className="m-2 list-none">
+                                                    {user?.bloodGroup}
+                                                </li>
+                                                <li className="m-2 list-none">
+                                                    {user?.gender}
+                                                </li>
                                             </div>
 
                                             {/* present address  */}
@@ -99,38 +141,26 @@ const Profile = () => {
                                                 Prsent Address
                                                 {/* <hr /> */}
                                             </div>
-                                            <div className="col-span-1 sm:hidden">
+                                            <div className="col-span-2">
                                                 <ul>
-                                                    <li className="m-2">
-                                                        <BiUser size={20} />
-                                                    </li>
-                                                    <li className="m-2">
-                                                        <BiUser size={20} />
-                                                    </li>
-                                                    <li className="m-2">
-                                                        <AiOutlineMail
-                                                            size={20}
-                                                        />
-                                                    </li>
-                                                    <li className="m-2">
-                                                        <AiOutlineMail
-                                                            size={20}
-                                                        />
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="col-span-1">
-                                                <ul>
-                                                    <li className="font-medium m-2">
+                                                    <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                        <BiUser size={20} />{" "}
                                                         Region
                                                     </li>
-                                                    <li className="font-medium m-2">
+                                                    <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                        <BiUser size={20} />{" "}
                                                         City
                                                     </li>
-                                                    <li className="font-medium m-2">
+                                                    <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                        <AiOutlineMail
+                                                            size={20}
+                                                        />{" "}
                                                         Area
                                                     </li>
-                                                    <li className="font-medium m-2">
+                                                    <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                        <AiOutlineMail
+                                                            size={20}
+                                                        />{" "}
                                                         Address
                                                     </li>
                                                 </ul>
@@ -169,42 +199,31 @@ const Profile = () => {
                                                 Permanent Address
                                                 {/* <hr /> */}
                                             </div>
-                                            <div className="col-span-1 sm:hidden">
+                                            <div className="col-span-2">
                                                 <ul>
-                                                    <li className="m-2">
+                                                    <li className="m-2 list-none flex flex-row gap-4 font-medium">
                                                         <BiUser size={20} />
-                                                    </li>
-                                                    <li className="m-2">
-                                                        <BiUser size={20} />
-                                                    </li>
-                                                    <li className="m-2">
-                                                        <AiOutlineMail
-                                                            size={20}
-                                                        />
-                                                    </li>
-                                                    <li className="m-2">
-                                                        <AiOutlineMail
-                                                            size={20}
-                                                        />
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                            <div className="col-span-1">
-                                                <ul>
-                                                    <li className="font-medium m-2">
                                                         Region
                                                     </li>
-                                                    <li className="font-medium m-2">
+                                                    <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                        <BiUser size={20} />
                                                         City
                                                     </li>
-                                                    <li className="font-medium m-2">
+                                                    <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                        <AiOutlineMail
+                                                            size={20}
+                                                        />
                                                         Area
                                                     </li>
-                                                    <li className="font-medium m-2">
+                                                    <li className="m-2 list-none flex flex-row gap-4 font-medium">
+                                                        <AiOutlineMail
+                                                            size={20}
+                                                        />
                                                         Address
                                                     </li>
                                                 </ul>
                                             </div>
+
                                             <div className="col-span-2">
                                                 <ul>
                                                     <li className="m-2">
