@@ -15,6 +15,7 @@ import { loadUser } from "./actions/userActions";
 import ProtectedRoute from "./components/route/ProtectedRoute";
 import Profile from "./pages/profile/Profile";
 import EditProfile from "./pages/profile/EditProfile";
+import NewPost from "./pages/bloodPost/new/NewPost";
 
 function App() {
     useEffect(() => {
@@ -44,6 +45,8 @@ function App() {
                         path="/activation/:token"
                         element={<ActivationEmail />}
                     />
+
+                    {/* profile  */}
                     <Route
                         path="/me"
                         element={
@@ -57,6 +60,17 @@ function App() {
                         element={
                             <ProtectedRoute>
                                 <EditProfile />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* blood post  */}
+
+                    <Route
+                        path="/blood-post/new"
+                        element={
+                            <ProtectedRoute>
+                                <NewPost />
                             </ProtectedRoute>
                         }
                     />

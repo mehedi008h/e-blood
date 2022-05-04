@@ -63,7 +63,7 @@ const Navbar = () => {
                                                 <>
                                                     <div className="bg-black p-4 absolute top-20 w-max z-10 rounded-lg">
                                                         <ul>
-                                                            <li className="text-white">
+                                                            <li className="text-white my-2">
                                                                 <Link
                                                                     to="/me"
                                                                     className="flex items-center"
@@ -75,6 +75,20 @@ const Navbar = () => {
                                                                 >
                                                                     <AiOutlineUser className="mr-3" />
                                                                     My Profile
+                                                                </Link>
+                                                            </li>
+                                                            <li className="text-white my-2">
+                                                                <Link
+                                                                    to="/blood-post/new"
+                                                                    className="flex items-center"
+                                                                    onClick={() =>
+                                                                        setOpen(
+                                                                            false
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <AiOutlineUser className="mr-3" />
+                                                                    Create Post
                                                                 </Link>
                                                             </li>
                                                         </ul>

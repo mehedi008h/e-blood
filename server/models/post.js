@@ -56,7 +56,7 @@ const postSchema = new mongoose.Schema({
             required: [true, "Please enter hospital address"],
         },
         location: {
-            type: URL,
+            type: String,
             required: [false, "Plase eneter hospital google map location link"],
         },
     },
@@ -142,6 +142,18 @@ const postSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: "User",
         required: true,
+    },
+
+    // likes
+    likes: {
+        type: [String],
+        default: [],
+    },
+
+    // comments
+    comments: {
+        type: [String],
+        default: [],
     },
 
     // blood donate request
