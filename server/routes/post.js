@@ -4,6 +4,6 @@ const { isAuthenticatedUser } = require("../middleware/auth");
 const router = express.Router();
 
 // post
-router.route("/").post(isAuthenticatedUser, createPost);
+router.route("/post/new").post(isAuthenticatedUser, createPost);
 
 module.exports = router;

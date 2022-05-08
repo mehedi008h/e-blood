@@ -36,14 +36,11 @@ const EditProfile = () => {
         "https://res.cloudinary.com/mehedi08h/image/upload/v1647280872/react-final/auth/logo_wyrs86.png"
     );
 
-    console.log(moment(bod).format("MM/DD/YYYY"));
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const { user } = useSelector((state) => state.auth);
     const { error, isUpdated, loading } = useSelector((state) => state.user);
-
-    console.log(bio);
 
     useEffect(() => {
         if (user) {

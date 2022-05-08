@@ -141,7 +141,7 @@ const postSchema = new mongoose.Schema({
     doner: {
         type: mongoose.Schema.ObjectId,
         ref: "User",
-        required: true,
+        required: false,
     },
 
     // likes
@@ -178,6 +178,12 @@ const postSchema = new mongoose.Schema({
             },
         },
     ],
+    // doner
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+        required: true,
+    },
 });
 
 module.exports = mongoose.model("BloodPost", postSchema);
