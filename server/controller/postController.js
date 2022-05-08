@@ -2,6 +2,7 @@ const BloodPost = require("../models/post");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 
+// create blood post
 exports.createPost = catchAsyncErrors(async (req, res, next) => {
     const postData = {
         title: req.body.title,
@@ -37,5 +38,14 @@ exports.createPost = catchAsyncErrors(async (req, res, next) => {
     res.status(201).json({
         success: true,
         post,
+    });
+});
+
+// get all blood post
+exports.getBloodPost = catchAsyncErrors(async (req, res, next) => {
+    const bloodPost = await BloodPost.find();
+
+    res.status(200).json({
+        bloodPost,
     });
 });

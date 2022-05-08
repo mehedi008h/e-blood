@@ -1,5 +1,8 @@
 import axios from "axios";
 import {
+    ALL_POST_FAIL,
+    ALL_POST_REQUEST,
+    ALL_POST_SUCCESS,
     CLEAR_ERRORS,
     NEW_POST_FAIL,
     NEW_POST_REQUEST,
@@ -17,7 +20,6 @@ export const newPost = (postData) => async (dispatch) => {
         };
 
         const { data } = await axios.post(`/api/v1/post/new`, postData, config);
-        console.log("Data: ", data);
 
         dispatch({
             type: NEW_POST_SUCCESS,
@@ -26,6 +28,25 @@ export const newPost = (postData) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: NEW_POST_FAIL,
+            payload: error.response.data.message,
+        });
+    }
+};
+
+export const getAllPosts = () => async (dispatch) => {
+    try {
+        dispatch({ type: ALL_POST_REQUEST });
+
+        const { data } = await axios.get(`/api/v1/post`);
+        console.log("Data: ", data);
+
+        dispatch({
+            type: ALL_POST_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: ALL_POST_FAIL,
             payload: error.response.data.message,
         });
     }

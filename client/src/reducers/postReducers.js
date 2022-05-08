@@ -1,4 +1,7 @@
 import {
+    ALL_POST_FAIL,
+    ALL_POST_REQUEST,
+    ALL_POST_SUCCESS,
     CLEAR_ERRORS,
     NEW_POST_FAIL,
     NEW_POST_REQUEST,
@@ -31,6 +34,37 @@ export const newPostReducer = (state = { post: {} }, action) => {
             return {
                 ...state,
                 success: false,
+            };
+
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error: null,
+            };
+
+        default:
+            return state;
+    }
+};
+
+export const postsReducer = (state = { posts: [] }, action) => {
+    switch (action.type) {
+        case ALL_POST_REQUEST:
+            return {
+                loading: true,
+                posts: [],
+            };
+
+        case ALL_POST_SUCCESS:
+            return {
+                loading: false,
+                posts: action.payload.bloodPost,
+            };
+
+        case ALL_POST_FAIL:
+            return {
+                loading: false,
+                error: action.payload,
             };
 
         case CLEAR_ERRORS:

@@ -1,6 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { getAllPosts } from "../../actions/postActions";
 
 const Home = () => {
+    const dispatch = useDispatch();
+    const { loading, posts, error } = useSelector((state) => state.posts);
+
+    console.log(posts);
+
+    useEffect(() => {
+        if (error) {
+            return toast.error(error);
+        }
+
+        dispatch(getAllPosts());
+    }, [dispatch, error]);
     return (
         <div className="flex min-h-full">
             <div className="w-4/5 mx-auto my-4">
