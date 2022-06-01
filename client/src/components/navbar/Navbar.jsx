@@ -22,7 +22,7 @@ const Navbar = () => {
         }
     }, [dispatch, error, navigate]);
     return (
-        <nav className="bg-black py-4">
+        <nav className="bg-black py-4 border-b-2 border-border">
             <div className="flex flex-row justify-between items-center w-4/5 mx-auto">
                 <div>
                     <h1 className="text-white font-roboto text-lg font-bold tracking-wider">

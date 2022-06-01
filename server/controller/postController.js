@@ -49,3 +49,34 @@ exports.getBloodPost = catchAsyncErrors(async (req, res, next) => {
         bloodPost,
     });
 });
+
+exports.likePost = catchAsyncErrors(async (req, res, next) => {
+    let post = await BloodPost.findById(req.params.id);
+
+    if (!post) {
+        return next(new ErrorHandler("Post not found", 404));
+    }
+
+    console.log(req.user._id);
+
+    const index = post.likes.findIndex((id) => id === String(req.user._id));
+
+    console.log(index);
+
+    if (index === -1) {
+        post.likes.push(req.user._id);
+    } else {
+        post.likes = post.likes.filter((id) => id !== String(req.user._id));
+    }
+
+    post = await BloodPost.findByIdAndUpdate(req.params.id, post, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+    });
+
+    res.status(200).json({
+        success: true,
+        post,
+    });
+});

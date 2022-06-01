@@ -178,7 +178,7 @@ const postSchema = new mongoose.Schema({
             },
         },
     ],
-    // doner
+    // user
     user: {
         type: mongoose.Schema.ObjectId,
         ref: "User",

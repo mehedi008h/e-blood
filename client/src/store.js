@@ -3,7 +3,11 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { authReducer } from "./reducers/authReducers";
 import { userReducer } from "./reducers/userReducers";
-import { newPostReducer, postsReducer } from "./reducers/postReducers";
+import {
+    newPostReducer,
+    postReducer,
+    postsReducer,
+} from "./reducers/postReducers";
 
 const reducer = combineReducers({
     auth: authReducer,
@@ -12,6 +16,7 @@ const reducer = combineReducers({
     // post
     newPost: newPostReducer,
     posts: postsReducer,
+    post: postReducer,
 });
 
 const middlware = [thunk];

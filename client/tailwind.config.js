@@ -7,6 +7,7 @@ module.exports = {
             white: "#fff",
             glass: "rgba(230, 228, 228, 0.25)",
             grey: "#383838",
+            border: "rgb(21, 37, 57)",
         },
         fontFamily: {
             lato: ["Lato", "sans-serif"],

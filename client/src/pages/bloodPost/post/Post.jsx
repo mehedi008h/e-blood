@@ -1,8 +1,56 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { AiOutlineComment, AiOutlineEye, AiOutlineHeart } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { AiOutlineComment, AiOutlineEye } from "react-icons/ai";
+import {
+    clearErrors,
+    getAllPosts,
+    likePost,
+} from "../../../actions/postActions";
+import { LIKE_POST_RESET } from "../../../constants/postConstants";
+import { MdThumbUp, MdThumbUpOffAlt } from "react-icons/md";
 
 const Post = ({ post }) => {
+    const dispatch = useDispatch();
+
+    const { user } = useSelector((state) => state.auth);
+
+    const Likes = () => {
+        if (post?.likes?.length > 0) {
+            return post.likes.find(
+                (like) => like === (user?._id || user?._id)
+            ) ? (
+                <>
+                    <MdThumbUp size={20} />
+                    &nbsp;
+                    {post.likes.length > 2
+                        ? `You and ${post.likes.length - 1} others`
+                        : `${post.likes.length} like${
+                              post.likes.length > 1 ? "s" : ""
+                          }`}
+                </>
+            ) : (
+                <>
+                    <MdThumbUpOffAlt size={20} />
+                    &nbsp;{post.likes.length}{" "}
+                    {post.likes.length === 1 ? "Like" : "Likes"}
+                </>
+            );
+        }
+
+        return (
+            <>
+                <MdThumbUpOffAlt size={20} fontSize="small" />
+                &nbsp;Like
+            </>
+        );
+    };
+
+    // handle likes
+    const handleLikes = () => {
+        dispatch(likePost(post._id));
+    };
     return (
         <div className="bg-white rounded-md mb-4">
             <div className="p-4">
@@ -22,8 +70,11 @@ const Post = ({ post }) => {
             <hr />
             <div className="grid grid-cols-3">
                 <div className="col-span-1 py-1 text-center">
-                    <div className="flex justify-center items-center">
-                        <AiOutlineHeart size={20} />
+                    <div
+                        className="flex justify-center items-center"
+                        onClick={() => handleLikes()}
+                    >
+                        <Likes />
                     </div>
                 </div>
                 <div className="col-span-1 py-1 text-center">
